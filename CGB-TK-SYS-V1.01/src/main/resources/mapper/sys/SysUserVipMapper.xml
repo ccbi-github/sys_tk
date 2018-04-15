@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tk.sys.dao.SysUserVipDao">
+
+      <!-- 删除关系数据 -->
+      <delete id="deleteObject">
+      
+         delete from tk_user_vip
+         where user_id=#{userId}
+         
+      </delete>
+
+      <select id="findVipIdByUserId"
+              resultType="integer">
+              select vip_id
+              from tk_user_vip
+              where user_id=#{userId}
+      </select>
+      
+      <select id="findUserIdByVipId"
+              resultType="integer">
+              select user_id
+              from tk_user_vip
+              where vip_id=#{vipId}
+      </select>
+
+      <insert id="insertObject">
+          insert into tk_user_vip
+          (user_id,vip_id)
+          values
+          (#{userId},#{vipId})
+      </insert>
+   
+</mapper>
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tk.sys.dao.SysBookMarksDao">
+	<select id="findBookMarks"
+			parameterType="integer"
+			resultType="integer">
+		select course_id from tk_bookmarks where 
+		user_id=#{userId}   
+		 
+	</select>
+    <!-- List<Map<String,Course >> 
+	findBookMarks(Integer user_id);
+	int addBookMark(Integer course_id);
+	int deleteBookMark(Integer id); -->
+	
+	<insert id="insertBookMark">
+		insert into tk_bookmarks 
+		values 
+		(null,#{user_id},#{course_id},now())
+	
+	</insert>
+	
+	<delete id="deleteBookMark">
+		delete from tk_bookmarks where user_id=#{user_id}
+	</delete>
+    
+</mapper>
+
+
+
+
+
+
+

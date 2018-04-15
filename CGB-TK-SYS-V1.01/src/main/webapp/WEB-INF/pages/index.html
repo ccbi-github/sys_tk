@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>逃课网</title>
+    <link rel="stylesheet" href="dist/css/header.css">
+    <link rel="stylesheet" href="dist/icomoon/style.css">
+    <link rel="stylesheet" href="dist/css/main.css">
+    <link rel="stylesheet" href="dist/css/footer.css">
+    <link rel="stylesheet" href="dist/css/lesson_list.css">
+    <!-- <script type="text/javascript" src="dist/js/jquery-1.4.2.js"></script> -->
+     <script type="text/javascript" src="dist/js/jquery.js"></script>
+     <script type="text/javascript" src="dist/js/jquery.min.js"></script>
+    <style>
+        body,div,a,ul,li,h1,h2,h3,img,p,i{
+            margin: 0;
+            padding: 0;
+        }
+        #index{
+            background: #fff;
+            color: #14191e;
+            font: 14px/1.5 "PingFang SC","微软雅黑","Microsoft YaHei",Helvetica,"Helvetica Neue",Tahoma,Arial,sans-serif;
+            overflow-y: scroll;
+            min-width: 1200px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body id="index">
+    <div class="header">
+        <div id="nav">
+            <div class="log" id="log">
+                <a><img src="dist/img/logo.png" width="140" height="70"></a>
+            </div>
+            <ul class="nav-item">
+                <li id="menu"><a href="#">首页</a></li>
+            </ul>
+            <ul class="nav-item login-null">
+                <li id="free"><a href="#">免费课程</a></li>
+                <li class="lesson-look"><a href="#">职业发展</a></li>
+                <li class="lesson-look"><a href="#">实战</a></li>
+                <li class="lesson-look"><a href="#">猿问</a></li>
+                <li class="lesson-look"><a href="#">发现</a></li>
+            </ul>
+            <ul class="nav-item login-super" style="display: none">
+                <li id="super-sys"><a href="#">系统管理</a></li>
+                <li id="super-user"><a href="#">用户管理</a></li>
+                <li id="super-lesson"><a href="#">课程管理</a></li>
+            </ul>
+            <ul class="nav-item login-normal" style="display: none">
+                <li id="normal-free"><a href="#">免费课程</a></li>
+                <li id="normal-lesson"><a href="#">我的课程</a></li>
+                <li id="normal-level"><a href="#">VIP提升</a></li>
+            </ul>
+            <div id="login-area">
+                <ul class="clearfix logined">
+                    <li class="app-load">
+                        <a href="index.do" style="width: 60px;">联系我们</a>
+                    </li>
+                    <li class="shop-cart">
+                        <a href="index.do" class="shop-cart-icon">
+                            <span class="gwc"></span>
+                            <span>购物车</span>
+                        </a>
+                    </li>
+                    <li class="remind_warp">
+                        <a href="index.do" >
+                            <span>通知</span>
+                        </a>
+                    </li>
+                    <li class="header-signin">
+                        <span  id="js-signin-btn">登录</span>
+                        / <span id="js-signup-btn">注册</span>
+                    </li>
+                    <li class="set_btn user-card-box " id="header-user-card" style="display: none;">
+                        <a id="header-avator">
+                            <img width="40" height="40" src="dist/img/1.jpg">
+                        </a>
+                        <div class="g-user-card" style="visibility: hidden">
+                            <div class="card-inner">
+                                <div class="card-user"></div>
+                                <div class="card-menu"></div>
+                                <div class="card-object"></div>
+                                <div class="card-out"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="search-warp" style="min-width: 20px;height: 72px"></div>
+        </div>
+    </div>
+    <div class="main">
+    </div>
+    <div class="footer min-width">
+        <div class="container">
+            <div class="footer-warp">
+                <div class="footer-sns clearfix">
+                    <div class="l">
+                        <div class="l-p weixin"></div>
+                        <p>官方公众号</p>
+                    </div>
+                    <div class="l">
+                        <div class="l-p weibo"></div>
+                        <p>官方微博</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-link">
+                <a href="/about/cooperate" target="_blank" title="企业合作">企业合作</a>
+                <a href="/about/job" target="_blank" title="人才招聘">人才招聘</a>
+                <a href="/about/contact" target="_blank" title="联系我们">联系我们</a>
+                <a href="/about/recruit" target="_blank" title="讲师招募">讲师招募</a>
+                <a href="/about/faq" target="_blank" title="常见问题">常见问题</a>
+                <a href="/user/feedback" target="_blank" title="意见反馈">意见反馈</a>
+                <a href="http://daxue.imooc.com/" target="_blank">慕课大学</a>
+                <a href="/about/friendly" target="_blank" title="友情链接">友情链接</a>
+            </div>
+            <div class="footer-copyright">
+                <p>©&nbsp;2018&nbsp;imooc.com&nbsp;&nbsp;京ICP备 12003892号-11</p>
+            </div>
+        </div>
+
+    </div>
+    <div id="login" style="display: none">
+    </div>
+
+<script>
+    $(function () {
+        $("#login").load("loginUI.do");
+        $(".main").load("mainUI.do");
+        $(".header-signin span").click(function () {
+            var sWidth=document.body.scrollWidth;
+            var sHeight=document.body.scrollHeight;
+            //获取页面的可视区域高度和宽度
+            var wHeight=document.documentElement.clientHeight;
+            var oMask=document.createElement("div");
+            oMask.id="mask";
+            oMask.style.height=sHeight+"px";
+            oMask.style.width=sWidth+"px";
+            document.body.appendChild(oMask);
+            $("#login").css("display","block");
+            deleteMask();
+
+        });
+        function deleteMask(){
+            $(".rl-close").click(function () {
+                var  oMask = document.getElementById("mask");
+                document.body.removeChild(oMask);
+                $("#login").css("display","none");
+            });
+        }
+
+        $("#menu").click(function () {
+            $(".main").load("mainUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        /* 未登录时点击页面*/
+        $("#free").click(function () {
+            changeColor();
+            $(".main").load("lesson_listUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        $(".lesson-look").click(function () {
+            changeColor();
+            $(".main").load("lesson_unKnownUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+
+        /*管理用户登陆 点击页面*/
+        $("#super-sys").click(function(){
+            changeColor();
+            $(".main").load("sysUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        $("#super-lesson").click(function(){
+            changeColor();
+            $(".main").load("lessonUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        $("#super-user").click(function(){
+            changeColor();
+            $(".main").load("userUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+
+        /*普通用户登陆 点击页面*/
+        $("#normal-free").click(function(){
+            changeColor();
+            $(".main").load("normal_freeUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        $("#normal-lesson").click(function(){
+            changeColor();
+            $(".main").load("normal_lessonUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        $("#normal-level").click(function(){
+            changeColor();
+            $(".main").load("normal_levelUI.do",function () {
+                $(".main").removeData();
+            })
+        });
+        function changeColor() {
+            $("#nav").css("background-color","#000");
+            $(".min-width").css("background-color","#000");
+        }
+    })
+</script>
+</body>
+</html>

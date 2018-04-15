@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tk.sys.dao.SysVipDao">
+	<sql id="whereSql">
+	<where>
+			<if test="id!=null and id >=0">
+			id=#{id}
+			</if>
+			<if test="vipLevel!=null and vipLevel >=0">
+			and  vipLevel=#{vipLevel}
+			</if>
+			
+			<if test="validity!=null and validity >=0">
+			and  validity=#{validity}
+			</if>	
+				
+		</where>
+	</sql>
+
+<sql id="whereSqlPage">
+	<where> 
+			<if test="sysVip.id!=null and sysVip.id >=0">
+			id=#{sysVip.id}
+			</if>
+			<if test="sysVip.vipLevel!=null and sysVip.vipLevel >=0">
+			and  vipLevel=#{sysVip.vipLevel}
+			</if>
+			
+			<if test="sysVip.validity!=null and sysVip.validity >=0">
+			and  validity=#{sysVip.validity}
+			
+			</if>		
+			<if test="username!=null and username !=''">
+			and  u.username like concat("%",#{username},"%")
+			</if>		
+			 
+		</where>
+	</sql>
+
+<!-- 高级映射 -->
+	<resultMap type="vipUser" id="vipUser">
+		<id property="id" column="vid"/>
+		<result property="vipLevel" column="vipLevel"/>	
+		<result property="validity" column="validity"/>	
+		<!-- 高级映射 -->
+		<association property="sysUser" javaType="sysUser">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="address" column="address"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="valid" column="valid"/>
+		<result property="modifiedTime" column="modifiedTime"/> 
+		<result property="address" column="address"/> 
+		</association>
+		
+		
+	</resultMap>
+	
+	<select id="findObjectsPage" resultMap="vipUser">
+		select v.id vid,v.vipLevel,v.validity,u.* 
+		from tk_vip v 
+		left join 
+		tk_user_vip uv 
+		
+		on 
+		v.id=uv.vip_id  
+		left join 
+		tK_user u
+		on 
+		uv.user_id=u.id
+		<include refid="whereSqlPage"/>
+		order by modifiedTime desc
+		limit #{startIndex},#{pageSize}
+	</select>
+
+	<select id="findRowCount" resultType="int" >
+	 select count(v.vipLevel) from 
+		tk_vip v 
+		<!-- 只有添加名字作为条件来查找时，才连表查询 -->
+		 <if test="username!=null and username!=''">
+			 left join tk_user_vip uv 
+			 on v.id=uv.vip_id  
+			 left join tK_user u
+			 on uv.user_id=u.id
+		 </if>
+		 
+	 <include refid="whereSqlPage"></include>
+	</select>
+
+	<!-- 添加vip信息 -->
+	<insert id="insertObject" parameterType="sysVip"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into tk_vip
+		(id,validity,buyingTime,vipLevel,
+		createdTime,modifiedTime,
+		createdUser,modifiedUser)
+		values
+		(null,#{validity},now(),
+		#{vipLevel},now(),now(),
+		#{createdUser},#{modifiedUser})
+	</insert>
+
+	<update id="updateObject" parameterType="sysVip">
+		update tk_vip
+		<set>
+			<if test="vipLevel!=null">
+				vipLevel=#{vipLevel},
+			</if>
+			<if test="validity!=null">
+				validity=#{validity},
+			</if>
+			<if test="modifiedUser!=null">
+				modifiedUser=#{modifiedUser},
+			</if>
+			modifiedTime=now()
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="findObjectById" resultType="sysVip">
+		select *
+		from tk_vip
+		where id=#{id}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+

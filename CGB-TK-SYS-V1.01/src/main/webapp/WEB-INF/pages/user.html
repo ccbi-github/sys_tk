@@ -1,0 +1,60 @@
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                用户管理
+            </h2>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active" id="allUsers" data-id="allUsers">
+            <span class="navtext">全部</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem"  id="superUser" data-id="superUser">
+            <span class="navtext">超级用户</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem"  id="VIPUser" data-id="VIPUser">
+            <span class="navtext">VIP用户</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem"  id="normalUser" data-id="normalUser">
+            <span class="navtext ">普通用户</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+    	  doLoadUserListPage();
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+            
+            var value = $(this).attr("data-id");
+          //绑定数据，用于判断执行那个查询操作
+        	$(".plan-list-wrap").data("data",value);
+            doLoadUserListPage();
+        });
+        //加载用户信息列表
+       
+    
+        
+    })
+    
+  
+        function doLoadUserListPage(){
+    	 $(".plan-list-wrap").data("userInfo",null);
+        	$(".plan-list-wrap").load("user/doUserListUI.do");
+        	
+        }
+    
+    
+    
+</script>

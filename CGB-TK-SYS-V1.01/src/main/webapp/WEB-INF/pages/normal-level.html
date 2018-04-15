@@ -1,0 +1,36 @@
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                用户VIP
+            </h2>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active">
+            <span class="navtext">成为VIP</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">VIP权限</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">VIP续费</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+        });
+    })
+</script>

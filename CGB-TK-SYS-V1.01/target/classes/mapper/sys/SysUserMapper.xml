@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tk.sys.dao.SysUserDao">
+	<sql id="whereSql">
+	<where>
+		<!-- 以用户名为条件查找 -->
+			<if test="sysUser.username!=null and sysUser.username!=''">
+			username like concat("%", #{sysUser.username},"%")
+			</if>
+			<!-- 以电话号码为条件查找 -->
+			 <if test="sysUser.email!=null and sysUser.email!=''">
+			email like concat("%", #{sysUser.email},"%")
+			</if>
+			<!-- 以id号为条件查找 -->
+			<if test="sysUser.id!=null and sysUser.id>=0">
+			id = #{sysUser.id}
+			</if>
+			<!-- 以电话号码为条件查找 -->
+			 <if test="sysUser.phone!=null and sysUser.phone!=''">
+			phone like concat("%", #{sysUser.phone},"%")
+			</if>
+		</where>
+	
+	</sql>
+
+	<select id="findObjectById" resultType="sysUser" parameterType="Integer">
+		select * from tk_user where id=#{id}
+	</select>
+
+
+	<!-- 陈传碧 -->	
+	<select id="findAllObjectPageAndVip" resultType="sysUser">
+		select * from tk_user
+		<include refid="whereSql"/>
+		order by modifiedTime desc
+		limit #{startIndex},#{pageSize}
+	</select>
+	
+	
+
+	<select id="findRowCount" resultType="int">
+		select count(*) from tk_user 
+		 
+	</select>
+
+  	<!-- All User -->
+  	<select id="findAllObject"
+  	resultType="sysUser">
+  		select * from tk_user
+  	</select>
+  	
+	<!-- 更新用户信息 -->
+	<update id="updateObject">
+		update tk_user
+		<set>
+			<if test="username!=null and username!=''">
+				username=#{username},
+			</if>
+			<if test="password!=null and password!=''">
+				password=#{password},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+			<if test="email!=null and email!=''">
+				email=#{email},
+			</if>
+			<if test="address!=null and address!=''">
+				address=#{address},
+			</if>
+			<if test="salt!=null and salt!=''">
+				salt=#{salt},
+			</if>
+			<if test="modifiedUser!=null and modifiedUser!=''">
+				modifiedUser=#{modifiedUser},
+			</if>
+			modifiedTime=now()
+		</set>
+		where id=#{id}
+	</update>
+
+	<!-- 根据用户名查找用户ID -->
+
+	<select id="findIdByUserName" resultType="java.lang.Integer">
+		select id
+		from tk_user
+		where username=#{username}
+	</select>
+
+	<!-- 根据用户名查找用户信息 -->
+
+	<select id="findObjectByUserName" resultType="sysUser">
+		select *
+		from tk_user
+		where username=#{username}
+	</select>
+
+
+	<!-- 向表中写入记录 -->
+	<insert id="insertObject" parameterType="sysUser"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tk_user
+		(username,password,email,phone,salt,valid,address,
+		createdUser,modifiedUser,createdTime,modifiedTime)
+		values
+		(#{username},#{password},#{email},#{phone},#{salt},#{valid},
+		#{address},#{createdUser},#{modifiedUser},now(),now())
+	</insert>
+
+	<!-- 禁用和启用状态信息 -->
+	<update id="validById">
+		update tk_user
+		set valid=#{valid},modifiedTime=now(),
+		modifiedUser=#{modifiedUser}
+		where id=#{id}
+	</update>
+
+
+
+</mapper>
+
+
+
+
+
+
+

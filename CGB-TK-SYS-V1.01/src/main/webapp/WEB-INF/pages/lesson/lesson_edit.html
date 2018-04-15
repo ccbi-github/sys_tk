@@ -1,0 +1,167 @@
+<!-- Horizontal Form -->
+ <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">添加课程</h3>
+      </div>
+      <!-- /.box-header -->
+      <!-- form start -->
+      <form class="form-horizontal">
+        <div class="box-body">
+          <div class="form-group">
+            <label for="type" class="col-sm-2 control-label">课程类别</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="type">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">课程名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control"  id="name">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="level" class="col-sm-2 control-label">课程等级</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control"  id="level">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="price" class="col-sm-2 control-label">价格</label>
+              <div class="col-sm-10">
+              <input type="text" class="form-control"  id="price">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="picUrl" class="col-sm-2 control-label">图片</label>
+            <div class="col-sm-10">
+               <input type="text" class="form-control"  id="picUrl">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="testPicUrl" class="col-sm-2 control-label">课程图片</label>
+            <div class="col-sm-10">
+               <input type="button" class="form-control"  id="testPicUrl" value="上传图片"/>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">描述</label>
+            <div class="col-sm-10">
+               <input type="text" class="form-control"  id="description">
+            </div>
+          </div>
+         
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="button" class="btn btn-default btn-cancel">Cancel</button>
+          <button type="button" class="btn btn-info pull-right btn-save">Save</button>
+        </div>
+        <!-- /.box-footer -->
+      </form>
+    </div>
+<script type="text/javascript">
+ $(document).ready(function(){
+	 //做到这里，还没获取数据来初始化
+	 
+	 var courseInfo=$(".plan-list-wrap").data("courseInfo");
+	 if(courseInfo){
+		 doInitFormData(courseInfo);
+	 }
+	 
+	// doLoadRoles();
+	$(".btn-cancel").click(function(){
+		doCancel();
+		 
+	});
+	
+	$(".btn-save").click(function(){
+		doSaveOrUpdate();
+	});
+	
+	
+ });
+ //返回
+ function doCancel(){
+	 //返回之前，把绑定的数据除掉，赋值为null
+	 $(".plan-list-wrap").data("courseInfo",null);
+	//返回，调用加载用户列表方法
+	 doLoadCourseUI();
+ }
+ 
+ function doSaveOrUpdate(){
+
+	 //获取表单数据
+	 var params=getEditFormData();
+	  var id=params.id;
+	
+	 insertUrl="course/doSaveObject.do";
+	 updatetUrl="course/doUpdateObject.do";
+	 
+	 var url =id?updatetUrl:insertUrl;
+     var title=id?"修改课程成功":"添加课程成功";
+	 $.ajax({
+		 type:"POST",
+		 url:url,
+		 data:params,
+		 success:function(result){
+			 alert(title);
+			 doCancel();
+		 },
+	 	error: function(XMLHttpRequest){  
+	 	     alert( "Error: " + XMLHttpRequest.responseText); 
+	 	     }
+	 });
+	 
+	/*  $.post(url,params,function(result){
+		 if(result.state==1){
+			 alert(result.message);
+			 doCancel();
+		 }else{
+			alert(result.message);
+		 }
+	 })   */
+	 
+ }
+ 
+ function getEditFormData(){
+	 //获取用户输入的数据
+	 
+	 var params={
+		id:$("#type").data("id"), 
+		type:$("#type").val(),
+	    name:$("#name").val(),
+	    level:$("#level").val(),
+	    price:$("#price").val(),
+	    picUrl:$("#picUrl").val(),
+	    description:$("#description").val()
+	 }
+	
+	 
+	 return params;
+ }
+ 
+  
+ function doInitFormData(data){
+	 //初始化用户信息 
+	 $("#type").val(data.type);
+	 $("#type").data("id",data.id);
+	 $("#name").val(data.name);
+	 $("#level").val(data.level);
+	 $("#price").val(data.price);
+	 $("#picUrl").val(data.picUrl);
+	 $("#description").val(data.description);
+ }
+ 
+
+</script>
+    
+    
+    
+    
+    
+    
+    

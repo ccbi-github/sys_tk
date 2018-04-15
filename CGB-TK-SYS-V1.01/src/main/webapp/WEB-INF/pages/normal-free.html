@@ -1,0 +1,36 @@
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                免费课程
+            </h2>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active">
+            <span class="navtext">全部</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">已学习</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">未学习</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+        });
+    })
+</script>

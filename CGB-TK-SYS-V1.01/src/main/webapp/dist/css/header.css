@@ -1,0 +1,142 @@
+/*header css*/
+.header{
+    height: 72px;
+    background: #fff;
+}
+#nav {
+    margin: 0 auto;
+}
+#nav{
+    width: auto;
+    position: relative;
+    height: 72px;
+    padding-right: 10px;
+    z-index: 900;
+    box-shadow: 0 4px 8px 0 rgba(7,17,27,.1);
+    background-color: #fff;
+}
+.log{
+    float: left;
+    margin: 0 28px 0 24px;
+}
+#log a{
+    white-space: nowrap;
+}
+.log a{
+    transition: background-color .2s;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: auto;
+    height: 72px;
+    background: 0 0!important;
+    text-indent: 0!important;
+}
+.logo a img {
+    height: 72px;
+}
+ul,ol{
+    list-style: none;
+}
+.nav-item li{
+    float: left;
+}
+a{
+    outline: 0;
+    text-decoration: none;
+    font-weight: 400;
+}
+.nav-item a{
+    padding: 0 20px;
+    display: block;
+    color: #4D555D;
+    text-align: center;
+    font-size: 16px;
+    line-height: 72px;
+    -webkit-transition: background-color .3s;
+    -moz-transition: background-color .3s;
+    transition: background-color .3s;
+}
+.nav-item a:hover{
+    color: red;
+}
+#login-area{
+    background-size: cover;
+    position: relative;
+    float: right;
+}
+.app-load{
+    line-height: 72px;
+    font-size: 14px;
+    color: rgba(255,255,255,.6);
+}
+.logined>li{
+    float: left;
+    position: relative;
+}
+.app-load>a{
+    text-decoration: none;
+    padding: 0 15px;
+    font-size: 14px;
+}
+.logined li>a{
+    display: block;
+    height: 72px;
+    line-height: 72px;
+    width: 60px;
+    color: #787d82;
+    text-align: center;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    transition: background-color .2s;
+}
+.logined li>a:hover{
+    color: red;
+}
+.logined li>span:hover{
+    color: red;
+}
+.shop-cart{
+    position: relative;
+    height: 36px;
+    line-height: 36px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+.shop-cart .shop-cart-icon{
+    display: inline-block;
+    padding: 0 18px;
+    width: auto;
+    box-sizing: border-box;
+}
+.shop-cart .shop-cart-icon{
+    height: 36px;
+    line-height: 36px;
+    border: 1px solid #D9DDE1;
+    border-radius: 18px;
+}
+.header-signin {
+    color: #D9DDE1;
+    margin-left: 12px;
+}
+.logined>li {
+    float: left;
+    position: relative;
+}
+
+.header-signin span{
+    line-height: 72px;
+    display: inline-block;
+    width: auto;
+    padding: 0 12px;
+    color: #4D555D;
+}
+.set_btn{
+    right: 0;
+}
+.set_btn img{
+    vertical-align: middle;
+    border-radius: 50%;
+    display: inline-block;
+    background: url(../img/1.jpg) no-repeat;
+}

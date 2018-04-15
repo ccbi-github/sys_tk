@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tk.sys.dao.SysUserCourseDao">
+    <insert id="insertObject">
+        INSERT INTO tk_user_course
+        (user_id,course_id,validity,buyingTime)VALUES
+        (#{user_id},#{course_id},#{validity},now())
+    </insert>
+
+    <delete id="deleteObject">
+        DELETE FROM tk_user_course
+        WHERE user_id=#{user_id} AND course_id=#{course_id}
+    </delete>
+
+    <select id="findCourseById"
+            resultType="int">
+        SELECT course_id FROM tk_user_course WHERE user_id=#{user_id}
+    </select>
+
+    <select id="findValidityById"
+            resultType="int">
+        SELECT validity FROM tk_user_course
+        WHERE user_id=#{user_id} AND course_id=#{course_id}
+    </select>
+</mapper>

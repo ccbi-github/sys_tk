@@ -1,0 +1,61 @@
+
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                通往成功的道路是没有捷径的
+            </h2>
+            <div class="desc-box">
+                <p class="desc-item big-desc-item">课程体系化</p>
+                <em class="desc-line">/</em>
+                <p class="desc-item">问答作业1V1</p>
+                <em class="desc-line">/</em>
+                <p class="desc-item">学练测一体</p>
+                <em class="desc-line">/</em>
+                <p class="desc-item">视频不限期</p>
+                <em class="desc-line">/</em>
+                <p class="desc-item big-desc-item">服务随开随用</p>
+            </div>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active">
+            <span class="navtext">全部</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">Web前端攻城狮</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">Java攻城狮</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">Android攻城狮</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">PHP攻城狮</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">添加课程</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".plan-list-wrap").load("model_content.html");
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+        });
+    })
+</script>

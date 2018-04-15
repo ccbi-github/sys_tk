@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.tk.sys.dao.SysCourseDao">
+  	<!-- 根据课程名查询课程信息,当课程名为空时，查询所有信息 -->
+  	<sql id="queryId">
+  		<where>
+  			<if test="type!=null and type !=0">
+  				type =#{type}
+  			</if>
+  			<if test="name!=null and name!=''">
+  				 and name like concat('%',#{name},'%')
+  			</if>
+  		</where>
+  	</sql>
+  	
+  	<select id="findRowCount" resultType="int">
+  	select count(*) from tk_course
+  	<include refid="queryId"></include>
+  	</select>
+  	
+  	
+  	
+  	<!-- All lessons -->
+  	<select id="findAllObject"
+  	resultType="sysCourse">
+  		select * from tk_course
+  	</select>
+  	
+  	
+  	
+  	<!-- ccb -->
+  	<select id="findObjectPagesByType" resultType="sysCourse">
+  		select * from tk_course 
+  		<include refid="queryId" />
+  		order by modifiedTime desc
+  		limit #{startIndex},#{pageSize}
+  	</select>
+  	
+  	
+  	
+  	
+  	
+  	
+  	<select id="findPageObjects" resultType="sysCourse">
+  		select * from tk_course 
+  		<include refid="queryId" />
+  	</select>
+  	<!-- 查询总行数,当输入课程名的时候，查询该课程名对应的总行数,当不输入课程名时,现实全部 课程行数-->
+  	<select id="getRowCount" resultType="int">
+  		select count(*) from tk_cource 
+  		<include refid="queryId" />
+  	</select>
+  	<!-- 根据选中的id号,单独或批量删除课程 -->
+  	<delete id="deleteObjects">
+  		delete from tk_course  where id in
+  		<foreach collection="ids" open="(" close=")" separator="," item="item">
+  		${item}</foreach>
+  	</delete>
+  	<!-- 插入课程信息 -->
+  	<insert id="insertObject">
+  		insert into tk_course
+        (id,name,price,description,type,state,picUrl,level,stuNum,createdTime,modifiedTime,createdUser,modifiedUser)
+  		values
+  		(null,#{name},#{price},#{description},#{type},#{state},#{picUrl},#{level},#{stuNum},now(),now(),#{createdUser},#{modifiedUser})
+  	</insert>
+  	<!-- 根据id号查询查询课程信息 -->
+  	<select id="findObjectById" resultType="sysCourse">
+  		select * from tk_course  where id=#{id}
+  	</select>
+  	<!-- 根据id号修改课程信息 -->
+  	<update id="updateObjectById">
+  		update tk_course 
+  		<set>
+  			name=#{name},price=#{price},
+  		<if test="description!=null and description!=''">description=#{description},</if>
+  		<if test="type!=null and type!=''">type=#{type},</if>
+  		<if test="state!=null and state!=''">state=#{state},</if>
+  		<if test="picUrl!=null and picUrl!=''">picUrl=#{picUrl},</if>
+  		<if test="level!=null and level!=''">level=#{level},</if>
+  		<if test="stuNum!=null and stuNum!=''">stuNum=#{stuNum},</if>
+  		<if test="modifiedUser!=null and modifiedUser!=''">modifiedUser=#{modifiedUser},</if>
+  		modifiedTime=now()
+  		</set>
+  		where id=#{id}
+  	</update>
+  	<!-- 通过id号，改变用户表中课程的上架，下架状态 -->
+  	<update id="changeObjectStateById">
+  		update tk_course  set state=#{state} where id=#{id}
+  	</update>
+  	
+  	<!-- 通过id数组，改变用户表中课程的上架，下架状态 -->
+  	<update id="changeObjectStateByIds">
+  		update tk_course  set  state=#{state},modifiedTime=now() where id 
+  		in (
+  		<foreach collection="ids" item="idVel" separator="," >#{idVel}</foreach>
+  		)
+  		 
+  	</update>
+  </mapper>

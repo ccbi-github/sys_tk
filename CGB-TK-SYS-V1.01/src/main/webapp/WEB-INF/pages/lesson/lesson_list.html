@@ -1,0 +1,282 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;margin:auto;">
+						<input type="text" name="table_search" id="searchNameId"
+							class="form-control pull-right" placeholder="课程名"></input>
+
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default btn-search">搜索
+                                <i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-delete" >删除</button>
+							<button type="button" class="btn btn-default btn-edit"  id-data="btn-add" >添加</button>
+							<button type="button" class="btn btn-default btn-shelve" >上架</button>
+							<button type="button" class="btn btn-default btn-unShelve" >下架</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="allSelect" /></th>
+							<th>课程名</th>
+							<th>价格</th>
+							<th>状态</th>
+							<th>描述</th>
+							<th>课程等级</th>
+							<th>热度</th>
+							<th>修改时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId"></tbody>
+				</table>
+			</div>
+			<div id="pageId" class="box-footer clearfix">
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+
+	$(function(){
+		
+		 
+		$("#pageId").load("course/doCommonPageUI.do");
+	
+	$(".btn-search").click(function(){
+		doSearch();
+	})
+	
+	$(".btn-edit").click(function(){
+		var idVal=$(this).attr("id-data");
+		doEditUI(idVal);
+	});
+	
+	
+	
+	$("input[name='allSelect']").click(function(){
+		  
+		doAllSelect($(this).prop("checked"));
+	});
+	 
+	$("#tbodyId").on("click",".checkClass",doChangCheckItem);
+	
+	$(".input-group-btn")
+	.on("click",".btn-delete",doDelete)
+	.on("click",".btn-shelve",doShelve)
+	.on("click",".btn-unShelve",doUnShelve);
+
+	
+	doGetObject();
+	
+	
+	});
+	/* 上架操作  state,表示course的状态，1表示上架，0表示下架*/
+	function doShelve(){
+		doSetState(1);//把1传过去
+		changeShowState(1);//把1传过去
+	}
+	//改变课程状态的方法
+	function doSetState(state){
+		var ids= getIds().toString() ;
+		if(ids.length<=0){
+			alert("请选择需要下架的课程");
+			return;
+		}
+		var params={
+				ids:ids,
+				state:state
+				}
+		var url="course/doChangeStateByIds.do";
+		$.getJSON(url,params,function(result){
+			if(result==0){alert(result.message);}
+		});
+	}
+	/* 下架操作   state,表示course的状态，1表示上架，0表示下架 */
+	function doUnShelve(){
+		doSetState(0);
+		changeShowState(0);
+	}
+	/* 删除 */
+	function doDelete(){
+		var ids=getIds().toString();
+		if(ids.length<=0){
+			alert("请选择需要删除的课程");
+			return;
+		}
+		var params={ids:ids};
+		var url="course/doDeleteObjects.do";
+		$.post(url,params,function(resutl){
+			if(resutl.state==1){
+				doLoadCourseUI();
+				alert("删除成功");
+				
+			}else{
+				alert("删除失败");
+			}
+		})
+	}
+	//获取ip值，并存到数值里，返回
+	function getIds(){
+		 var ids=new Array();
+		var i=0;
+		 $("input[name='checkItem']:checked").each(function(){
+			  ids[i]=$(this).prop("id") ;
+			  i++;
+		});
+		return ids; 
+		
+	}
+	
+	//复选框
+	function doChangCheckItem(){ 
+		var checkboxAll= $("input[name='allSelect']")
+		 var flag=true;
+		 $("input[name='checkItem']").each(function(){
+			 if(!$(this).prop("checked")){
+				 checkboxAll.prop("checked",false);
+				 flag=false;
+			 }
+		 }) 
+		 if(flag){
+			 checkboxAll.prop("checked",true); 
+		 }
+	};
+	
+	//复选框
+	function doAllSelect(flag){
+		 $("input[name='checkItem']").prop("checked",flag); 
+	}
+	
+	
+	
+	 //调编辑页面，修改和添加都会调该页面
+	function doEditUI(Val){
+		
+		var title;
+		if(Val=="btn-add"){
+			title="添加课程";
+		}else{
+			title="修改课程";
+		
+			 var vAdrress=$(Val).parents("tr").find("td");
+			  
+			  //获取需要修改的课程id
+			var id =vAdrress.eq(0).find("input").attr("id");
+			 
+			var picUrl =vAdrress.eq(0).find("input").attr("picUrl");
+			
+			var type =vAdrress.eq(0).find("input").attr("courseType");
+			var name =vAdrress.eq(1).html();
+			 
+			var price=vAdrress.eq(2).html();
+			//状态不在这里修改，所以不用获取
+			var description =vAdrress.eq(4).html();
+			var level= vAdrress.eq(5).html();
+			 
+			
+			 var courseInfo= {
+					 type:type,
+					 id:id,
+					 name:name,
+					 price:price,
+					 description:description,
+					 level:level,
+					 picUrl:picUrl
+			 }
+			 //绑定数据
+			 $(".plan-list-wrap").data("courseInfo",courseInfo);
+		}
+		
+		var url="course/editUI.do";
+			$(".plan-list-wrap").load(url,function(){
+				$(".box-title").html(title);
+			});
+		 
+	}
+	
+	
+	
+	function doSearch(){
+		$(".pagination").data("pageCurrent",1)
+		doGetObject();
+	}
+	
+	
+	function doGetObject(){
+		var type=$(".plan-list-wrap").data("data");
+		var url="course/doFindObjectPagesByType.do";
+		var pageCurrent= $(".pagination").data("pageCurrent");
+		if(!pageCurrent)pageCurrent=1;
+		var params={pageCurrent:pageCurrent};
+		//需要搜索的名
+		var name=$("#searchNameId").val();
+		if(name)params.name=name;
+		params.type=type;
+		$.getJSON(url,params,function(result){
+			if(result.state==1){
+				setTableRowsValues(result.data.records);
+				setPagination(result.data);
+			}else{
+				alert(result.message);
+			}
+		})
+	}
+	
+	
+	function setTableRowsValues(data){
+		var tb=$("#tbodyId");
+		tb.empty();
+		for(var i in data){
+			var tr=$("<tr></tr>")
+			var tds=
+			"<td><input class='checkClass' name='checkItem' type='checkbox' id='"
+			+data[i].id+"' picUrl='"+data[i].picUrl+"' courseType='"+data[i].type+"'/>"+
+			"</td><td>"+data[i].name+
+			"</td><td>"+data[i].price+
+			"</td><td >"+(data[i].state?"上架":"下架")+
+			"</td><td width='30%'>"+data[i].description+
+			"</td><td>"+data[i].level+
+			"</td><td>"+data[i].stuNum+
+			"</td><td>"+data[i].modifiedTime+
+			"</td><td><button type='button' class='update-btn'>update</button></td>"
+			tr.append(tds);
+			tb.append(tr);
+		}
+		//注册update单击事件
+		$(".update-btn").click(function(){
+			doEditUI(this);
+		});
+	}
+	
+	 
+	//当课程的状态改变时，展示更新页面上的课程状态
+	function changeShowState(state){
+		 $("input[name='checkItem']:checked").each(function(){
+		$(this).parents("tr").find("td").eq(3).html(state?"上架":"下架");// 改变页面的值
+			  
+		});	 
+	}
+	
+	
+
+	
+	
+
+	
+ 
+</script>
+
+
+
+
+

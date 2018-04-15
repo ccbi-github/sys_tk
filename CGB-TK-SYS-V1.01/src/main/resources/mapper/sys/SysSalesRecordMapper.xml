@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.tk.dao.SalesRecordDao">
+  <update id="updateObject" parameterType="salesRecord">
+  	update tk_salesRecord 
+  	<set>
+  		<if test="state!=null and state!=0">
+  			state=#{state},
+  		</if>
+        modifiedTime=now(),
+  	</set>
+  	where orderNumber=#{orderNumber}
+  </update>
+  
+  <sql id="pageWhere">
+        <where>
+         <if test="orderNumber!=null and orderNumber!=''">
+            orderNumber like concat("%",#{orderNumber},"%")
+         </if>
+       </where>
+    </sql>
+    
+  	<select id="findPageObjects" resultType="salesRecord">
+  		select * from tk_salesRecord
+  		<include refid="pageWhere"/>
+  		order by createdTime desc 
+  		limit #{startIndex},#{pageSize}
+  	</select>
+  	
+  	<select id="getRowCount" resultType="int">
+ 		select count(*) from tk_salesRecord
+ 		<include refid="pageWhere"/>
+  	</select>
+  	
+  	<select id="findObject" resultType="salesRecord">
+  		select * from tk_salesRecord
+  	</select>
+  	
+  	<insert id="insertObject" parameterType="salesRecord">
+  		insert into tk_salesRecord 
+  		(id,orderNumber,cource_id,
+  		user_id,price,buyingTime,createdTime,
+  		modifiedTime,createdUser,modifiedUser,state) 
+  		values
+  		(null,#{orderNumber},#{cource_id},
+  		#{user_id},#{price},now(),
+  		now(),now(),#{createdUser},#{modifiedUser},#{state})
+  	</insert>
+  </mapper>

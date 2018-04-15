@@ -1,0 +1,60 @@
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                课程管理
+            </h2>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active couseClass" data-id="0">
+            <span class="navtext couseClass">全部课程</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem couseClass" data-id="2">
+            <span class="navtext">web前端</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem couseClass" data-id="3">
+            <span class="navtext">JAVA</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem couseClass" data-id="1">
+            <span class="navtext">PHP</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem couseClass" data-id="4">
+            <span class="navtext" >数据库</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+<!-- 四种类型,1,2,3,4分别对应PHP,前端,Java,安卓 -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+        });
+        
+       $(".banner-menu")
+       .on("click",".couseClass",doLoadCourseUI);
+        doLoadCourseUI();
+    });
+    
+    function doLoadCourseUI(){
+   	 //返回之前，把绑定的数据除掉，赋值为null
+   	 $(".plan-list-wrap").data("courseInfo",null);
+   	 
+    	var courseType= $(this).attr("data-id") ;
+    	$(".plan-list-wrap").data("data",courseType);
+    	//做到这里
+    	$(".plan-list-wrap").load("course/courseUI.do");
+    }
+    
+    
+</script>

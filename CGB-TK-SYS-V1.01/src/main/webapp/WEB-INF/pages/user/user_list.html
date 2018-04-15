@@ -1,0 +1,293 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;margin:auto;">
+						<input type="text" name="table_search" id="searchNameId"
+							class="form-control pull-right" placeholder="用户名"></input>
+
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default btn-search">搜索
+                                <i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-edit"  id-data="btn-add" >添加</button>
+							<button type="button" class="btn btn-default btn-edit" id-data="btn-update">修改</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="allSelect" /></th>
+							<th>用户名</th>
+							<th>邮箱</th>
+							<th>手机号</th>
+							<th>状态</th>
+							<th>vip等级</th>
+							<th>vip有效期(天)</th>
+							<th>修改时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId"></tbody>
+				</table>
+			</div>
+			<div id="pageId" class="box-footer clearfix">
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+
+	$(function(){
+		
+		 
+		$("#pageId").load("user/doCommonPageUI.do");
+	
+	$(".btn-search").click(function(){
+		doSearch();
+	})
+	
+	$(".btn-edit").click(function(){
+		var idVal=$(this).attr("id-data");
+		doEditUI(idVal);
+	});
+	
+	$("input[name='allSelect']").click(function(){
+		  
+		doAllSelect($(this).prop("checked"));
+	});
+	 
+	$("#tbodyId").on("click",".checkClass",doChangCheckItem);
+	
+	doGetObject();
+	
+	
+	});
+	
+	//复选框
+	function doChangCheckItem(){ 
+		var checkboxAll= $("input[name='allSelect']")
+		 var flag=true;
+		 $("input[name='checkItem']").each(function(){
+			 if(!$(this).prop("checked")){
+				 checkboxAll.prop("checked",false);
+				 flag=false;
+			 }
+		 }) 
+		 if(flag){
+			 checkboxAll.prop("checked",true); 
+		 }
+	};
+	
+	//复选框
+	function doAllSelect(flag){
+		 $("input[name='checkItem']").prop("checked",flag); 
+	}
+	
+	
+	
+	 
+	function doEditUI(idVal){
+		
+		var title;
+		if(idVal=="btn-add"){
+			title="添加用户";
+		}else{
+			title="修改用户";
+			var checkUpdate =$("input[name='checkItem']:checked");
+			 
+			 var length=checkUpdate.length;//获取所选中的长度
+			 if(length==0){
+				 alert("至少选择1个需要修改的用户");
+				 return;
+			 }else if(length>1){
+				 alert("最多只能选择1个需要修改的用户");
+				 return;
+			 }
+			 var vAdrress=checkUpdate.parents("tr").find("td");
+			
+			 
+			var userId =checkUpdate.prop("id");//获取需要修改的用户id
+			 
+			var username =vAdrress.eq(1).html();
+			var email=vAdrress.eq(2).html();
+			var phone=vAdrress.eq(3).html();
+			var valid =vAdrress.eq(4).html();
+			var vipLevel= vAdrress.eq(5).attr("vipLevel");
+			console.log("vipLevel= "+vipLevel);
+			var validity=vAdrress.eq(6).html() ;
+			var address= checkUpdate.attr("address");
+			
+			 var userInfo= {
+					 userId:userId,
+					 username:username,
+					 email:email,
+					 phone:phone,
+					 valid:valid,
+					 vipLevel:vipLevel,
+					 validity:validity,
+					 address:address
+			 }
+			 //绑定数据
+			 $(".plan-list-wrap").data("userInfo",userInfo);
+			 
+		}
+			 
+		 
+		
+		var url="user/doUserEditUI.do";
+		 
+		 
+			$(".plan-list-wrap").load(url,function(){
+				$(".box-title").html(title);
+			});
+		 
+	}
+	
+	
+	
+	function doSearch(){
+		$(".pagination").data("pageCurrent",1)
+		doGetObject();
+	}
+	
+	
+	function doGetObject(){
+		
+		var val=$(".plan-list-wrap").data("data");
+		
+		
+		 
+		var url="user/doFindObjectPagesByVipLeve.do";
+		 
+		
+		
+		var pageCurrent= $(".pagination").data("pageCurrent");
+		if(!pageCurrent)pageCurrent=1;
+		var params;
+		params={pageCurrent:pageCurrent}
+		
+		//需要搜索的名
+		var username=$("#searchNameId").val();
+		console.log("username="+username);
+		var vipLevel;
+		
+		
+		if(val=="allUsers" || username){
+			vipLevel=null;
+			if(username)
+			params.username=username;
+		}else {
+			if(val=="superUser"){
+				vipLevel=0;//超级用户
+			}else if(val=="VIPUser"){
+				vipLevel=2;//vip用户
+			}else if(val=="normalUser"){
+				vipLevel=1;//普通用户
+			}
+			
+			params.vipLevel=vipLevel;
+		}
+		 
+		  
+		
+		$.getJSON(url,params,function(result){
+			if(result.state==1){
+				setTableRowsValues(result.data.records);
+				
+				setPagination(result.data);
+			}else{
+				alert(result.message);
+			}
+		})
+	}
+	
+	
+	function setTableRowsValues(data){
+		 
+		
+		var tb=$("#tbodyId");
+		tb.empty();
+		for(var i in data){
+			var tr=$("<tr></tr>")
+			
+			//tb.data("valid",data[i].sysUser.valid);
+			
+			var tds=
+			"<td><input class='checkClass' name='checkItem' type='checkbox' id='"
+			+data[i].sysUser.id+"' address='"+data[i].sysUser.address+"'/>"+
+			"</td><td>"+data[i].sysUser.username+
+			"</td><td>"+data[i].sysUser.email+
+			"</td><td>"+data[i].sysUser.phone+
+			"</td><td >"+(data[i].sysUser.valid ?"启用":"禁用")+
+			//把vip等级绑定到属性里
+			"</td><td vipLevel='"+data[i].vipLevel
+			+"'>"+doShowVipLevel(data[i].vipLevel)+
+			"</td><td>"+data[i].validity+
+			"</td><td>"+data[i].sysUser.modifiedTime+
+			"</td><td><button type='button' class='changeValid'" 
+			 
+			+" id='"+data[i].sysUser.id+
+			"'>"+(data[i].sysUser.valid ?"禁用":"启用")+"</button></td>"
+			tr.append(tds);
+			tb.append(tr);
+			
+			
+			
+		}
+		
+		$(".changeValid").click(function(){
+			
+			 
+			var userId=$(this).attr("id");//获取需要更改的id
+			var flag=$(this).html();//获取需要改成的值
+			var validVal=(flag=="启用"?1:0); //翻译成数据：1，表示启用，0表示禁用
+			doChangeUserValid(userId,validVal);//调用该方法改变数据库的值
+			$(this).parents("tr").find("td").eq(4).html(validVal?"启用":"禁用");// 改变页面的值
+			$(this).html(validVal?"禁用":"启用");// 改变页面的值
+			 
+		});
+		
+	}
+	
+	function doShowVipLevel(data){
+		var val;
+		if(data==0){
+			val="超级管理员"	
+		}else if(data==1){
+			val="普通用户"	
+		}
+		 else{
+			val="vip用户"
+		}
+		
+		
+		return val;
+	}
+	
+	
+function doChangeUserValid(userId,validVal){
+	 var url="user/doValidByUserId.do";
+	params={
+			userId:userId,
+			valid:validVal
+			};
+	$.getJSON(url,params,function(result){
+		if(result.state==0)
+			alert(result.message);
+	});
+	
+}
+</script>
+
+
+
+
+

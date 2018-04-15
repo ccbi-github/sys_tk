@@ -1,0 +1,36 @@
+<div class="program-banner">
+    <div class="banner-header">
+        <div class="banner-header-context">
+            <h2 class="title">
+                系统管理
+            </h2>
+        </div>
+    </div>
+    <div class="banner-menu">
+        <a class="navitem  a active">
+            <span class="navtext">管理权限修改</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">用户权限控制</span>
+            <div class="navbot"></div>
+        </a>
+        <a class="navitem">
+            <span class="navtext">其它权限添加</span>
+            <div class="navbot"></div>
+        </a>
+    </div>
+</div>
+
+<div class="plan-list-wrap">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".navitem").click(function () {
+            $(".navitem").removeClass("active");
+            $(this).addClass("active");
+        });
+    })
+</script>
